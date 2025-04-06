@@ -643,6 +643,20 @@ section {
     .footer {
         padding: 2rem;
     }
+
+    .home-img.trigger-animation::before {
+        animation: wipeOutline 10s ease forwards;
+    }
+
+    /* Trigger animation when class added */
+    .about-img.trigger-animation {
+        animation: slideIn 1.2s ease-in-out forwards;
+    }
+
+    .about-img.trigger-animation::before {
+        animation: wipeOutline 2s ease forwards;
+    }
+
 }
 
 @media(max-width: 768px) {
@@ -732,30 +746,56 @@ section {
     .portfolio-container {
         grid-template-columns: repeat(2.1fr);
     }
+
     .home-img {
         width: 100vw;
-        
+
     }
 
     .about-img {
         width: 100vw;
     }
 
+    .home-img.trigger-animation::before {
+        animation: wipeOutline 10s ease forwards;
+    }
+
+    /* Trigger animation when class added */
+    .about-img.trigger-animation {
+        animation: slideIn 1.2s ease-in-out forwards;
+    }
+
+    .about-img.trigger-animation::before {
+        animation: wipeOutline 2s ease forwards;
+    }
 }
 
 @media(max-width: 617px) {
     .portfolio-container {
         grid-template-columns: 1fr;
     }
+
     .home-img {
         width: 100vw;
-        
+
     }
 
     .about-img {
         width: 100vw;
     }
 
+    .home-img.trigger-animation::before {
+        animation: wipeOutline 10s ease forwards;
+    }
+
+    /* Trigger animation when class added */
+    .about-img.trigger-animation {
+        animation: slideIn 1.2s ease-in-out forwards;
+    }
+
+    .about-img.trigger-animation::before {
+        animation: wipeOutline 2s ease forwards;
+    }
 }
 
 @media(max-width: 450px) {
@@ -766,13 +806,27 @@ section {
     .contact form .input-box input {
         width: 100%;
     }
+
     .home-img {
         width: 100vw;
-        
+
     }
 
     .about-img {
         width: 100vw;
+    }
+
+    .home-img.trigger-animation::before {
+        animation: wipeOutline 10s ease forwards;
+    }
+
+    /* Trigger animation when class added */
+    .about-img.trigger-animation {
+        animation: slideIn 1.2s ease-in-out forwards;
+    }
+
+    .about-img.trigger-animation::before {
+        animation: wipeOutline 2s ease forwards;
     }
 
 }
@@ -780,7 +834,7 @@ section {
 @media(max-width: 100px) {
     .home-img {
         width: 100vw;
-        
+
     }
 
     .about-img {
@@ -794,5 +848,18 @@ section {
     footer p {
         text-align: center;
         margin-top: 2rem;
+    }
+
+    .home-img.trigger-animation::before {
+        animation: wipeOutline 10s ease forwards;
+    }
+
+    /* Trigger animation when class added */
+    .about-img.trigger-animation {
+        animation: slideIn 1.2s ease-in-out forwards;
+    }
+
+    .about-img.trigger-animation::before {
+        animation: wipeOutline 2s ease forwards;
     }
 }
