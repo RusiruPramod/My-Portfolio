@@ -607,14 +607,14 @@ section {
     color: var(--second-bg-color);
 }
 
-/* breakpoints */
-
+/* Base breakpoint: adjust font size */
 @media (max-width: 1200px) {
     html {
         font-size: 55%;
     }
 }
 
+/* Tablet to small desktop */
 @media (max-width: 991px) {
     .header {
         padding: 2rem 4%;
@@ -625,7 +625,7 @@ section {
     }
 
     .services {
-        padding: 0rem 3% 2rem;
+        padding: 0 3% 2rem;
     }
 
     .portfolio {
@@ -639,23 +639,10 @@ section {
     .footer {
         padding: 2rem;
     }
-
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
-    }
-
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-    }
-
 }
 
-@media(max-width: 768px) {
+/* Tablet and below */
+@media (max-width: 768px) {
     .header {
         background: var(--bg-color);
         width: 100%;
@@ -672,15 +659,15 @@ section {
         width: 100%;
         padding: 1rem 4%;
         background: var(--bg-color);
-        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 2);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
         z-index: 1;
-        transition: .25s ease;
-        transition-delay: .25s;
+        transition: 0.25s ease;
+        transition-delay: 0.25s;
     }
 
     .navbar.active {
         left: 0;
-        transition-delay: .0s;
+        transition-delay: 0s;
     }
 
     .navbar .active-nav {
@@ -690,13 +677,9 @@ section {
         width: 100%;
         height: 100%;
         background: rgb(26, 41, 58);
-        border-top: .1rem solid rgb(0, 0, 0, -2);
+        border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
         z-index: -1;
         transition: 0.1s ease;
-        transition-delay: 0s;
-
-
-
     }
 
     .navbar a {
@@ -707,7 +690,6 @@ section {
 
     .home {
         flex-direction: column;
-
     }
 
     .home-content h3 {
@@ -718,85 +700,41 @@ section {
         font-size: 5rem;
     }
 
-    .home-img img {
+    .home-img,
+    .about-img {
         width: 70vw;
         margin-top: 4rem;
     }
 
-    .about img {
+    .about {
         flex-direction: column-reverse;
     }
 
-    .about img {
-        width: 70vw;
-        margin-top: 4rem;
-    }
-
-    .services h2 {
-        margin-bottom: 3rem;
-    }
-
+    .services h2,
     .portfolio h2 {
         margin-bottom: 3rem;
     }
 
     .portfolio-container {
-        grid-template-columns: repeat(2.1fr);
-    }
-
-    .home-img {
-        width: 100vw;
-
-    }
-
-    .about-img {
-        width: 100vw;
-    }
-
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
-    }
-
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media(max-width: 617px) {
+/* Small tablets and phones */
+@media (max-width: 617px) {
     .portfolio-container {
         grid-template-columns: 1fr;
     }
 
-    .home-img {
-        width: 100vw;
-
-    }
-
+    .home-img,
     .about-img {
         width: 100vw;
     }
-
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
-    }
-
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-    }
 }
 
-@media(max-width: 450px) {
-    .html {
+/* Phones */
+@media (max-width: 450px) {
+    html {
         font-size: 50%;
     }
 
@@ -804,40 +742,24 @@ section {
         width: 100%;
     }
 
-    .home-img {
-        width: 100vw;
-
-    }
-
+    .home-img,
     .about-img {
         width: 100vw;
     }
-
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
-    }
-
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-    }
-
 }
 
-@media(max-width: 100px) {
-    .home-img {
-        width: 100vw;
+/* Universal animation trigger styles */
+.home-img.trigger-animation::before,
+.about-img.trigger-animation::before {
+    animation: wipeOutline 10s ease forwards;
+}
 
-    }
+.about-img.trigger-animation {
+    animation: slideIn 1.2s ease-in-out forwards;
+}
 
-    .about-img {
-        width: 100vw;
-    }
-
+/* Optional extra small screens (100px is very small and impractical) */
+@media (max-width: 350px) {
     .footer {
         flex-direction: column-reverse;
     }
@@ -847,47 +769,27 @@ section {
         margin-top: 2rem;
     }
 
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
+    .home {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
+    .home-img {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 20px;
+        position: relative;
+        margin: auto;
     }
 
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
+    .home-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        animation: floatImage 4s ease-in-out infinite;
+        display: block;
+        border-radius: 20px;
     }
-    
-.home {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-
-}
-
-.home-img {
-    width: 580px;
-    /* or use % or vw for responsive */
-    height: 400px;
-    overflow: hidden;
-    border-radius: 20px;
-    position: relative;
-    
-    margin: auto;
-    /* optional for centering */
-}
-
-.home-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    animation: floatImage 4s ease-in-out infinite;
-    display: block;
-    border-radius: 20px;
-}
-
-
 }
