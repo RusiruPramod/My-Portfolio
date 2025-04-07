@@ -105,7 +105,19 @@ section {
 }
 
 
+@keyframes floatImage {
+    0% {
+        transform: translateY(0);
+    }
 
+    50% {
+        transform: translateY(-2.4rem);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
 
 
 .home-content h3 {
@@ -223,9 +235,11 @@ section {
 
 
 
+
+
 :root {
     --main-color: #0ef;
-    --about-color: #0ef; /* fallback in case not declared elsewhere */
+
 }
 
 .about {
@@ -233,14 +247,16 @@ section {
     justify-content: center;
     align-items: center;
     gap: 2rem;
+
     padding: 5rem 10%;
-    flex-wrap: wrap; /* Responsive layout */
+    flex-wrap: wrap;
+    /* For responsiveness */
 }
 
 .about-img {
     position: relative;
-    width: 100%;
-    max-width: 400px; /* Set max width for responsiveness */
+    width: 20vw;
+    /* Image size */
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -251,44 +267,34 @@ section {
 /* Image inside the container */
 .about-img img {
     width: 100%;
-    height: auto;
     display: block;
     border-radius: 12px;
     z-index: 1;
     position: relative;
 }
 
-/* Border overlay effect */
+/* Wipe outline animation effect */
 .about-img::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -100%; /* for animation start */
+    left: -100%;
     width: 100%;
     height: 100%;
-    border: 3px solid var(--about-color);
+    border: 2px solid var(--about-color);
     border-radius: 12px;
-    box-sizing: border-box;
     z-index: 2;
     pointer-events: none;
-    transition: left 0.5s ease; /* optional for smoothness */
 }
 
-/* Trigger animation class */
+/* Trigger animation when class added */
+.about-img.trigger-animation {
+    animation: slideIn 1.2s ease-in-out forwards;
+}
+
 .about-img.trigger-animation::before {
     animation: wipeOutline 2s ease forwards;
 }
-
-/* Animation definition */
-@keyframes wipeOutline {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 0;
-    }
-}
-
 
 /* About content */
 .about-content {
@@ -353,7 +359,6 @@ section {
         transform: translateY(0);
     }
 }
-
 
 
 
