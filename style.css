@@ -105,19 +105,7 @@ section {
 }
 
 
-@keyframes floatImage {
-    0% {
-        transform: translateY(0);
-    }
 
-    50% {
-        transform: translateY(-2.4rem);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-}
 
 
 .home-content h3 {
@@ -234,67 +222,82 @@ section {
 
 
 
-
-
-
 :root {
-    --main-color: #0ef;
-
+  --main-color: #0ef;
+  --about-color: #0ef;
 }
 
 .about {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-
-    padding: 5rem 10%;
-    flex-wrap: wrap;
-    /* For responsiveness */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 5rem 10%;
+  flex-wrap: wrap;
 }
 
 .about-img {
-    position: relative;
-    width: 20vw;
-    /* Image size */
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Image inside the container */
+/* Image floating animation */
 .about-img img {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
-    z-index: 1;
-    position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  animation: floatImage 4s ease-in-out infinite;
 }
 
-/* Wipe outline animation effect */
-.about-img::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--about-color);
-    border-radius: 12px;
-    z-index: 2;
-    pointer-events: none;
+/* Animated border wipe without moving layout */
+.about-img::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid var(--about-color);
+  border-radius: 12px;
+  box-sizing: border-box;
+  z-index: 2;
+  animation: wipeOutline 2s ease forwards;
+  pointer-events: none;
 }
 
-/* Trigger animation when class added */
-.about-img.trigger-animation {
-    animation: slideIn 1.2s ease-in-out forwards;
+/* Keyframes */
+@keyframes floatImage {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.4rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-.about-img.trigger-animation::before {
-    animation: wipeOutline 2s ease forwards;
+@keyframes wipeOutline {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
 }
+
+
+
 
 /* About content */
 .about-content {
@@ -330,6 +333,7 @@ section {
     color: var(--main-color);
 }
 
+
 /* Keyframes */
 @keyframes wipeOutline {
     0% {
@@ -359,6 +363,7 @@ section {
         transform: translateY(0);
     }
 }
+
 
 
 
