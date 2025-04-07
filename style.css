@@ -105,19 +105,7 @@ section {
 }
 
 
-@keyframes floatImage {
-    0% {
-        transform: translateY(0);
-    }
 
-    50% {
-        transform: translateY(-2.4rem);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-}
 
 
 .home-content h3 {
@@ -234,10 +222,9 @@ section {
 
 
 
-
 :root {
     --main-color: #0ef;
-    --about-color: #0ef; /* fallback in case not declared elsewhere */
+    --about-color: #0ef; /* Fallback if not declared elsewhere */
 }
 
 .about {
@@ -260,7 +247,7 @@ section {
     align-items: center;
 }
 
-/* Image inside the container */
+/* Image inside the container with floating animation */
 .about-img img {
     width: 100%;
     height: auto;
@@ -268,38 +255,54 @@ section {
     border-radius: 12px;
     z-index: 1;
     position: relative;
+    animation: floatImage 4s ease-in-out infinite;
 }
 
-/* Border overlay effect */
+/* Border overlay effect using transform */
 .about-img::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -100%; /* for animation start */
+    left: 0; 
     width: 100%;
     height: 100%;
     border: 3px solid var(--about-color);
     border-radius: 12px;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Ensures border stays inside bounds */
     z-index: 2;
     pointer-events: none;
-    transition: left 0.5s ease; /* optional for smoothness */
+    transform: translateX(-100%); /* Start off-screen */
+    transition: transform 0.5s ease; /* Optional smooth transition */
 }
 
-/* Trigger animation class */
+/* Trigger animation class for border overlay */
 .about-img.trigger-animation::before {
     animation: wipeOutline 2s ease forwards;
 }
 
-/* Animation definition */
+/* Wipe outline animation for the border overlay */
 @keyframes wipeOutline {
-    0% {
-        left: -100%;
+    from {
+        transform: translateX(-100%);
     }
-    100% {
-        left: 0;
+    to {
+        transform: translateX(0);
     }
 }
+
+/* Floating image animation */
+@keyframes floatImage {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2.4rem);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
 
 
 /* About content */
@@ -336,6 +339,7 @@ section {
     color: var(--main-color);
 }
 
+
 /* Keyframes */
 @keyframes wipeOutline {
     0% {
@@ -365,6 +369,7 @@ section {
         transform: translateY(0);
     }
 }
+
 
 
 
