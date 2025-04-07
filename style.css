@@ -84,7 +84,7 @@ section {
 }
 
 .home-img {
-    width: 580px;
+    width: 0px;
     /* or use % or vw for responsive */
     height: 400px;
     overflow: hidden;
@@ -165,6 +165,8 @@ section {
 
 .home-img.trigger-animation::before {
     animation: wipeOutline 10s ease forwards;
+    max-width: 100%;
+    left: 0;
 }
 
 /* Reuse existing wipeOutline keyframes */
@@ -290,10 +292,14 @@ section {
 /* Trigger animation when class added */
 .about-img.trigger-animation {
     animation: slideIn 1.2s ease-in-out forwards;
+    max-width: 100%;
+    left: 0;
 }
 
 .about-img.trigger-animation::before {
     animation: wipeOutline 2s ease forwards;
+    max-width: 100%;
+    left: 0;
 }
 
 /* About content */
