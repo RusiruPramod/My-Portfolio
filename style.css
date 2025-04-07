@@ -611,16 +611,14 @@ section {
     color: var(--second-bg-color);
 }
 
-/* Breakpoints for responsiveness */
+/* breakpoints */
 
-/* For screens below 1200px */
 @media (max-width: 1200px) {
     html {
         font-size: 55%;
     }
 }
 
-/* For screens below 991px */
 @media (max-width: 991px) {
     .header {
         padding: 2rem 4%;
@@ -630,40 +628,38 @@ section {
         padding: 10rem 4% 2rem;
     }
 
-    .home-img {
-        width: 100%;
-        max-width: 100vw;  /* Ensure it doesn't overflow */
-        overflow: hidden;  /* Hide any overflowing content */
+    .services {
+        padding: 0rem 3% 2rem;
     }
 
-    .home-img img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
+    .portfolio {
+        padding-bottom: 7rem;
+    }
+
+    .home {
+        padding: 0 4%;
+    }
+
+    .footer {
+        padding: 2rem;
     }
 
     .home-img.trigger-animation::before {
         animation: wipeOutline 10s ease forwards;
-        width: 100%;
     }
 
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-        width: 100%;
-    }
+ 
 
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-        width: 100%;
-    }
 }
 
-/* For screens below 768px */
-@media (max-width: 768px) {
+@media(max-width: 768px) {
     .header {
         background: var(--bg-color);
         width: 100%;
+    }
+
+    #menu-icon {
+        display: block;
     }
 
     .navbar {
@@ -673,7 +669,7 @@ section {
         width: 100%;
         padding: 1rem 4%;
         background: var(--bg-color);
-        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.2);
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 2);
         z-index: 1;
         transition: .25s ease;
         transition-delay: .25s;
@@ -681,7 +677,23 @@ section {
 
     .navbar.active {
         left: 0;
+        transition-delay: .0s;
+    }
+
+    .navbar .active-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgb(26, 41, 58);
+        border-top: .1rem solid rgb(0, 0, 0, -2);
+        z-index: -1;
+        transition: 0.1s ease;
         transition-delay: 0s;
+
+
+
     }
 
     .navbar a {
@@ -689,82 +701,88 @@ section {
         font-size: 2rem;
         margin: 3rem 0;
     }
+    
 
     .home {
         flex-direction: column;
+
+    }
+
+    .home-content h3 {
+        font-size: 2.6rem;
+    }
+
+    .home-content h1 {
+        font-size: 5rem;
     }
 
     .home-img img {
-        width: 100%;
+        width: 70vw;
         margin-top: 4rem;
     }
 
     .about img {
-        width: 100%;
+        flex-direction: column-reverse;
+    }
+
+    .about img {
+        width: 70vw;
         margin-top: 4rem;
     }
 
+    .services h2 {
+        margin-bottom: 3rem;
+    }
+
+    .portfolio h2 {
+        margin-bottom: 3rem;
+    }
+
     .portfolio-container {
-        grid-template-columns: repeat(1, 1fr); /* Adjust for mobile */
+        grid-template-columns: repeat(2.1fr);
     }
 
     .home-img {
-        width: 100%;
-        max-width: 100vw;
+        width: 100vw;
+
     }
 
     .about-img {
-        width: 100%;
+        width: 100vw;
     }
 
     .home-img.trigger-animation::before {
         animation: wipeOutline 10s ease forwards;
-        width: 100%;
+        width: 100vw;
     }
 
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-        width: 100%;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-        width: 100%;
-    }
+   
 }
 
-/* For screens below 617px */
-@media (max-width: 617px) {
+@media(max-width: 617px) {
     .portfolio-container {
         grid-template-columns: 1fr;
     }
 
-    .home-img,
+    .home-img {
+        width: 100vw;
+
+    }
+
     .about-img {
-        width: 100%;
-        max-width: 100vw;
+        width: 100vw;
     }
 
     .home-img.trigger-animation::before {
         animation: wipeOutline 10s ease forwards;
-        width: 100%;
+        width: 100vw;
     }
 
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-        width: 100%;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-        width: 100%;
-    }
+   
 }
 
-/* For screens below 450px */
-@media (max-width: 450px) {
-    html {
+@media(max-width: 450px) {
+    .html {
         font-size: 50%;
     }
 
@@ -773,40 +791,31 @@ section {
     }
 
     .home-img {
-        width: 100%;
-        max-width: 100vw;
+        width: 100vw;
+
     }
 
     .about-img {
-        width: 100%;
+        width: 100vw;
     }
 
     .home-img.trigger-animation::before {
         animation: wipeOutline 10s ease forwards;
-        width: 100%;
+        width: 100vw;
     }
 
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-        width: 100%;
-    }
+    
 
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-        width: 100%;
-    }
 }
 
-/* For screens below 100px (typically not needed, but for extreme cases) */
-@media (max-width: 100px) {
+@media(max-width: 100px) {
     .home-img {
-        width: 100%;
-        max-width: 100vw;
+        width: 100vw;
+
     }
 
     .about-img {
-        width: 100%;
+        width: 100vw;
     }
 
     .footer {
@@ -818,19 +827,7 @@ section {
         margin-top: 2rem;
     }
 
-    .home-img.trigger-animation::before {
-        animation: wipeOutline 10s ease forwards;
-        width: 100%;
-    }
+   
 
-    /* Trigger animation when class added */
-    .about-img.trigger-animation {
-        animation: slideIn 1.2s ease-in-out forwards;
-        width: 100%;
-    }
-
-    .about-img.trigger-animation::before {
-        animation: wipeOutline 2s ease forwards;
-        width: 100%;
-    }
+   
 }
