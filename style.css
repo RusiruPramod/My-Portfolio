@@ -239,7 +239,7 @@ section {
 
 :root {
     --main-color: #0ef;
-    --about-color: #0ef; /* fallback in case not declared elsewhere */
+    --about-color: #0ef;
 }
 
 .about {
@@ -248,15 +248,16 @@ section {
     align-items: center;
     gap: 2rem;
     padding: 5rem 10%;
-    flex-wrap: wrap; /* Responsive layout */
+    flex-wrap: wrap;
 }
 
 .about-img {
     position: relative;
     width: 100%;
-    max-width: 400px; /* Set max width for responsiveness */
+    max-width: 400px; /* Responsive container */
     border-radius: 12px;
     overflow: hidden;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -270,30 +271,30 @@ section {
     border-radius: 12px;
     z-index: 1;
     position: relative;
+    box-sizing: border-box;
 }
 
-/* Border overlay effect */
+/* Border overlay */
 .about-img::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -100%; /* for animation start */
+    left: -100%; /* Start from outside left */
     width: 100%;
     height: 100%;
     border: 3px solid var(--about-color);
     border-radius: 12px;
-    box-sizing: border-box;
     z-index: 2;
     pointer-events: none;
-    transition: left 0.5s ease; /* optional for smoothness */
+    box-sizing: border-box; /* ✅ Ensures border stays inside bounds */
 }
 
-/* Trigger animation class */
+/* Animation trigger */
 .about-img.trigger-animation::before {
     animation: wipeOutline 2s ease forwards;
 }
 
-/* Animation definition */
+/* Border slide-in animation */
 @keyframes wipeOutline {
     0% {
         left: -100%;
