@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rusirupramod.github.io/My-Portfolio/sitemap.xml
+
