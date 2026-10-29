@@ -25,4 +25,15 @@ export default defineConfig({
           if (id.includes('lucide-react')) {
             return 'icons';
           }
-        
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+  server: {
+    port: 3000,
+    open: false,
+    host: true,
+  },
+});
+
