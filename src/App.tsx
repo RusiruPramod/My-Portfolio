@@ -48,6 +48,15 @@ export default function App() {
     return () => clearInterval(interval);
   }, [appState]);
 
+  useEffect(() => {
+    const handleReplay = () => {
+      sessionStorage.removeItem('introSeen');
+      setAppState('intro');
+    };
+    window.addEventListener('replay-intro', handleReplay);
+    return () => window.removeEventListener('replay-intro', handleReplay);
+  }, []);
+
   const handleIntroComplete = () => {
     sessionStorage.setItem('introSeen', 'true');
     setAppState('main');

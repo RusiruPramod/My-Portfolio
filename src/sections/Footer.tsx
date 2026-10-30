@@ -52,10 +52,20 @@ export default function Footer() {
           <p className="text-white/30 text-xs font-space text-center sm:text-left">
             &copy; {year} Rusiru Pramod. All rights reserved.
           </p>
-          <p className="text-white/20 text-xs font-orbitron tracking-widest">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('replay-intro'))}
+              className="text-cyan-DEFAULT/75 hover:text-cyan-DEFAULT text-xs font-orbitron tracking-wider transition-colors cursor-pointer flex items-center gap-1.5 py-1 px-2.5 rounded border border-cyan-DEFAULT/25 hover:border-cyan-DEFAULT/60 glass"
+              title="Watch cinematic intro animation again"
+            >
+              <span>↺</span> REPLAY INTRO
+            </button>
+            <p className="text-white/20 text-xs font-orbitron tracking-widest hidden sm:block">
             BUILT WITH REACT + THREE.JS
           </p>
         </div>
+      </div>
       </div>
     </footer>
   );

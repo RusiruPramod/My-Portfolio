@@ -42,16 +42,20 @@ export default function Navbar() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const triggerIntro = () => {
+    setMobileOpen(false);
+    window.dispatchEvent(new CustomEvent('replay-intro'));
+  };
+
   return (
     <>
       <nav
         role="navigation"
         aria-label="Main navigation"
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
             ? 'glass shadow-lg py-3'
             : 'bg-transparent py-5'
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between">
           {/* Logo */}
@@ -74,11 +78,10 @@ export default function Navbar() {
                   <a
                     href={href}
                     onClick={(e) => { e.preventDefault(); handleNavClick(href); }}
-                    className={`relative px-4 py-2 text-sm font-space font-medium tracking-wide transition-colors duration-200 rounded-lg ${
-                      isActive
+                    className={`relative px-4 py-2 text-sm font-space font-medium tracking-wide transition-colors duration-200 rounded-lg ${isActive
                         ? 'text-cyan-DEFAULT'
                         : 'text-white/70 hover:text-white'
-                    }`}
+                      }`}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     {label}
@@ -91,15 +94,25 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* CTA */}
-          <a
-            href="/cv.pdf"
-            download
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-space font-semibold text-space-900 bg-cyan-DEFAULT hover:bg-cyan-bright transition-colors duration-200 shadow-cyan-sm"
-            aria-label="Download CV"
-          >
-            Download CV
-          </a>
+          {/* CTA & Intro */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              type="button"
+              onClick={triggerIntro}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-space font-medium text-cyan-DEFAULT glass border-glow hover:border-cyan-DEFAULT/60 transition-all cursor-pointer hover:scale-105 active:scale-95"
+              title="Watch 3D space intro animation"
+            >
+              <span>🚀</span> Intro
+            </button>
+            <a
+              href="/cv.pdf"
+              download
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-space font-semibold text-space-900 bg-cyan-DEFAULT hover:bg-cyan-bright transition-colors duration-200 shadow-cyan-sm"
+              aria-label="Download CV"
+            >
+              Download CV
+            </a>
+          </div>
 
           {/* Hamburger */}
           <button
@@ -118,9 +131,8 @@ export default function Navbar() {
       <div
         id="mobile-menu"
         ref={menuRef}
-        className={`fixed inset-x-0 top-0 z-40 mobile-menu-bg transition-all duration-400 md:hidden ${
-          mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
-        }`}
+        className={`fixed inset-x-0 top-0 z-40 mobile-menu-bg transition-all duration-400 md:hidden ${mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
+          }`}
         aria-hidden={!mobileOpen}
       >
         <div className="pt-20 pb-8 px-6 flex flex-col gap-2">
@@ -132,20 +144,26 @@ export default function Navbar() {
                 key={href}
                 href={href}
                 onClick={(e) => { e.preventDefault(); handleNavClick(href); }}
-                className={`py-3 px-4 rounded-lg font-space font-medium text-lg transition-colors ${
-                  isActive
+                className={`py-3 px-4 rounded-lg font-space font-medium text-lg transition-colors ${isActive
                     ? 'text-cyan-DEFAULT glass border-glow'
                     : 'text-white/70 hover:text-white hover:bg-white/5'
-                }`}
+                  }`}
               >
                 {label}
               </a>
             );
           })}
+          <button
+            type="button"
+            onClick={triggerIntro}
+            className="mt-2 py-3 px-4 rounded-lg text-center font-space font-medium text-cyan-DEFAULT glass border-glow flex items-center justify-center gap-2"
+          >
+            <span>🚀</span> Watch 3D Intro
+          </button>
           <a
             href="/cv.pdf"
             download
-            className="mt-4 py-3 px-4 rounded-lg text-center font-space font-semibold text-space-900 bg-cyan-DEFAULT"
+            className="mt-2 py-3 px-4 rounded-lg text-center font-space font-semibold text-space-900 bg-cyan-DEFAULT"
           >
             Download CV
           </a>
@@ -154,4 +172,3 @@ export default function Navbar() {
     </>
   );
 }
-
