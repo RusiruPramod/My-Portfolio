@@ -8,7 +8,8 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const matRef = useRef<THREE.ShaderMaterial>(null);
 
-  const segments = quality === 'high' ? 120 : quality === 'medium' ? 70 : 40;
+  // Optimized segment counts for immediate rendering and smooth 60-120 FPS
+  const segments = quality === 'high' ? 60 : quality === 'medium' ? 50 : 36;
 
   const uniforms = useMemo(
     () => ({
@@ -22,6 +23,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
   );
 
   const vertexShader = `
+    precision mediump float;
     uniform float uTime;
     uniform vec2 uMouse;
     varying vec2 vUv;
@@ -31,13 +33,14 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
       vUv = uv;
       vec3 pos = position;
 
-      float wave1 = sin(pos.x * 2.0 + uTime * 0.6) * 0.12;
-      float wave2 = sin(pos.y * 1.5 + uTime * 0.4) * 0.08;
-      float wave3 = sin((pos.x + pos.y) * 1.0 + uTime * 0.3) * 0.06;
+      // Accelerated wave dynamics for fluid, futuristic motion
+      float wave1 = sin(pos.x * 2.0 + uTime * 1.5) * 0.13;
+      float wave2 = sin(pos.y * 1.5 + uTime * 1.1) * 0.09;
+      float wave3 = sin((pos.x + pos.y) * 1.0 + uTime * 0.8) * 0.07;
 
-      // Mouse influence
+      // Responsive mouse influence
       float mouseDist = distance(vec2(pos.x, pos.y) / 4.0, uMouse);
-      float mouseEffect = smoothstep(0.8, 0.0, mouseDist) * 0.18;
+      float mouseEffect = smoothstep(0.8, 0.0, mouseDist) * 0.20;
 
       pos.z += wave1 + wave2 + wave3 + mouseEffect;
       vElevation = pos.z;
@@ -47,6 +50,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
   `;
 
   const fragmentShader = `
+    precision mediump float;
     uniform vec3 uColorA;
     uniform vec3 uColorB;
     uniform vec3 uColorC;
@@ -57,7 +61,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
       float t = smoothstep(-0.2, 0.35, vElevation);
       vec3 col = mix(uColorC, uColorB, t);
       col = mix(col, uColorA, t * t);
-      gl_FragColor = vec4(col, 0.55 * t + 0.05);
+      gl_FragColor = vec4(col, 0.65 * t + 0.12);
     }
   `;
 
@@ -66,7 +70,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
   useFrame(({ clock }) => {
     if (matRef.current) {
       matRef.current.uniforms.uTime.value = clock.getElapsedTime();
-      matRef.current.uniforms.uMouse.value.lerp(mouse, 0.05);
+      matRef.current.uniforms.uMouse.value.lerp(mouse, 0.1);
     }
   });
 
@@ -80,7 +84,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
         fragmentShader={fragmentShader}
         transparent
         side={THREE.DoubleSide}
-        wireframe={quality === 'low'}
+        wireframe={true}
       />
     </mesh>
   );
@@ -88,7 +92,7 @@ function WaveMesh({ quality }: { quality: 'high' | 'medium' | 'low' }) {
 
 // ── Floating particles with connecting lines ─────────────────
 function ParticleField({ quality }: { quality: 'high' | 'medium' | 'low' }) {
-  const count = quality === 'high' ? 200 : quality === 'medium' ? 100 : 50;
+  const count = quality === 'high' ? 100 : quality === 'medium' ? 60 : 30;
   const pointsRef = useRef<THREE.Points>(null);
 
   const { positions, colors } = useMemo(() => {
@@ -109,8 +113,9 @@ function ParticleField({ quality }: { quality: 'high' | 'medium' | 'low' }) {
 
   useFrame(({ clock }) => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.y = clock.getElapsedTime() * 0.02;
-      pointsRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.01) * 0.05;
+      const t = clock.getElapsedTime();
+      pointsRef.current.rotation.y = t * 0.05;
+      pointsRef.current.rotation.x = Math.sin(t * 0.03) * 0.05;
     }
   });
 
@@ -143,8 +148,13 @@ export default function WaveBackground() {
 
   return (
     <Canvas
-      dpr={[1, quality === 'high' ? 1.5 : 1]}
-      gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.25]}
+      gl={{
+        antialias: false,
+        alpha: true,
+        powerPreference: 'high-performance',
+        stencil: false,
+      }}
       camera={{ position: [0, 2, 8], fov: 60 }}
       style={{ width: '100%', height: '100%' }}
       aria-hidden="true"
@@ -154,4 +164,3 @@ export default function WaveBackground() {
     </Canvas>
   );
 }
-

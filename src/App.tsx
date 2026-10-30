@@ -11,9 +11,9 @@ import Projects from './sections/Projects';
 import Timeline from './sections/Timeline';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import WaveBackground from './three/WaveBackground';
 
-// Lazy-load heavy 3D backgrounds
-const WaveBackground = lazy(() => import('./three/WaveBackground'));
+// Lazy-load heavy 3D intro scene
 const IntroScene = lazy(() => import('./three/IntroScene'));
 
 type AppState = 'loading' | 'intro' | 'main';
@@ -87,12 +87,10 @@ export default function App() {
       {/* Custom cursor (desktop only) */}
       <CustomCursor />
 
-      {/* Persistent 3D wave background */}
+      {/* Persistent 3D wave background - loads immediately */}
       {webGL && !reducedMotion && (
         <div className="canvas-bg">
-          <Suspense fallback={null}>
-            <WaveBackground />
-          </Suspense>
+          <WaveBackground />
         </div>
       )}
 
@@ -112,4 +110,3 @@ export default function App() {
     </>
   );
 }
-
