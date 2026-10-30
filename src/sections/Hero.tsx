@@ -159,4 +159,3 @@ function HudBadge({ label, value, className }: { label: string; value: string; c
     </div>
   );
 }
-
