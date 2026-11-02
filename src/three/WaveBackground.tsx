@@ -61,13 +61,13 @@ function WaveMesh({
       // Soft terrain elevation suppression under text area for a calmer surface
       float isTextZone = smoothstep(1.8, -1.8, pos.x) * smoothstep(-14.0, -8.0, pos.y) * smoothstep(10.0, 4.0, pos.y);
 
-      // Smooth, slow, rolling forward waves that glide continuously
-      float wave1 = sin(pos.x * 0.38 + worldY * 0.22) * 0.36;
-      float wave2 = sin(pos.x * 0.90 - worldY * 0.40) * 0.18;
-      float wave3 = cos(pos.x * 1.50 + worldY * 0.65) * 0.08;
+      // Smooth, rolling forward waves that glide continuously with lively pace
+      float wave1 = sin(pos.x * 0.38 + worldY * 0.28) * 0.40;
+      float wave2 = sin(pos.x * 0.90 - worldY * 0.46) * 0.20;
+      float wave3 = cos(pos.x * 1.50 + worldY * 0.72) * 0.10;
 
       // Subtle breathing ripple
-      float ripple = sin(pos.x * 2.0 + uTime * 0.9) * 0.025;
+      float ripple = sin(pos.x * 2.2 + uTime * 1.8) * 0.035;
 
       float elevation = (wave1 + wave2 + wave3) * (1.0 - isTextZone * 0.35) + ripple;
 
@@ -228,7 +228,7 @@ function ParticleField({
   );
 }
 
-// ── First-Person Walking Rig: Smooth, Slow & Majestic Stride ──
+// ── First-Person Walking Rig: Smooth, Lively Forward Stride ──
 function CameraRig({
   travelRef,
   speedRef,
@@ -243,14 +243,14 @@ function CameraRig({
   const { camera, mouse } = useThree();
 
   useFrame((_, delta) => {
-    // Smooth, slow, serene continuous walking pace: 1.05 units/sec
-    let targetSpeed = 1.05;
+    // Fast, lively continuous forward streaming pace: 2.2 units/sec
+    let targetSpeed = 2.2;
 
     // Up arrow / W gently increases forward pace (smooth gameplay sprint)
     if (keysPressed.current.up) {
-      targetSpeed = 2.3;
+      targetSpeed = 4.2;
     } else if (keysPressed.current.down) {
-      targetSpeed = 0.5; // Very slow crawl
+      targetSpeed = 1.0;
     }
 
     // Decay scroll wheel boost smoothly
@@ -258,17 +258,17 @@ function CameraRig({
     targetSpeed += boostRef.current;
 
     // Soft, gradual interpolation (no sudden jerking or jarring speed changes)
-    speedRef.current += (targetSpeed - speedRef.current) * Math.min(delta * 2.0, 1.0);
+    speedRef.current += (targetSpeed - speedRef.current) * Math.min(delta * 3.0, 1.0);
     travelRef.current += speedRef.current * delta;
 
     // Very gentle, rhythmic walking sway (head-bob)
     const travel = travelRef.current;
-    const bobY = Math.sin(travel * 1.0) * 0.020;
-    const swayX = Math.cos(travel * 0.5) * 0.010;
+    const bobY = Math.sin(travel * 1.2) * 0.020;
+    const swayX = Math.cos(travel * 0.6) * 0.010;
 
     camera.position.y = 1.75 + bobY;
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouse.x * 0.6 + swayX, 0.03);
-    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, -mouse.x * 0.02, 0.03);
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouse.x * 0.6 + swayX, 0.04);
+    camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, -mouse.x * 0.02, 0.04);
   });
 
   return null;
@@ -287,7 +287,7 @@ export default function WaveBackground() {
   const quality = useFPSMonitor();
 
   const travelRef = useRef(0);
-  const speedRef = useRef(1.05);
+  const speedRef = useRef(2.2);
   const boostRef = useRef(0);
   const keysPressed = useRef({ up: false, down: false });
   const [isAccelerating, setIsAccelerating] = useState(false);
@@ -364,12 +364,14 @@ export default function WaveBackground() {
   return (
     <>
       <Canvas
-        dpr={[1, 1.25]}
+        frameloop="always"
+        dpr={[1, typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : 1.25]}
         gl={{
           antialias: false,
           alpha: true,
           powerPreference: 'high-performance',
           stencil: false,
+          failIfMajorPerformanceCaveat: false,
         }}
         onCreated={({ gl }) => {
           gl.domElement.addEventListener('webglcontextlost', (e) => {
@@ -399,17 +401,15 @@ export default function WaveBackground() {
       {/* Cyberpunk Interactive Navigation Pill (Bottom-Left) */}
       <div className="fixed bottom-6 left-6 z-20 pointer-events-none hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass border border-cyan-500/25 text-[11px] font-orbitron tracking-wider text-cyan-DEFAULT/80 shadow-cyan-sm transition-all duration-300">
         <span
-          className={`w-2 h-2 rounded-full transition-all duration-200 ${
-            isAccelerating ? 'bg-cyan-DEFAULT shadow-cyan-md scale-125' : 'bg-cyan-DEFAULT/50'
-          }`}
+          className={`w-2 h-2 rounded-full transition-all duration-200 ${isAccelerating ? 'bg-cyan-DEFAULT shadow-cyan-md scale-125' : 'bg-cyan-DEFAULT/50'
+            }`}
         />
         <span className="text-white/40">NAVIGATE:</span>
         <span
-          className={`px-1.5 py-0.5 rounded text-[10px] font-bold border transition-all duration-200 ${
-            isAccelerating
+          className={`px-1.5 py-0.5 rounded text-[10px] font-bold border transition-all duration-200 ${isAccelerating
               ? 'bg-cyan-DEFAULT text-space-900 border-cyan-DEFAULT shadow-cyan-sm'
               : 'bg-white/10 text-white/90 border-white/20'
-          }`}
+            }`}
         >
           ▲ / W
         </span>

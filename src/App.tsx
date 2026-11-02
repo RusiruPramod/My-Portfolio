@@ -124,13 +124,12 @@ export default function App() {
     setAppState('main');
   };
 
-  // Main portfolio layout
-  const mainPortfolio = (
+  return (
     <>
       {/* Custom cursor (desktop only) */}
       <CustomCursor />
 
-      {/* Persistent 3D wave background - with ErrorBoundary fallback */}
+      {/* Persistent 3D wave background - starts rendering immediately on initial page boot */}
       {webGL && !reducedMotion && (
         <SafeErrorBoundary fallback={null}>
           <div className="canvas-bg">
@@ -139,8 +138,25 @@ export default function App() {
         </SafeErrorBoundary>
       )}
 
-      {/* ── App shell ── */}
-      <div className="relative z-10">
+      {/* Loading Screen Overlay */}
+      {appState === 'loading' && (
+        <LoadingScreen progress={loadingProgress} />
+      )}
+
+      {/* Cinematic 3D Intro Scene Overlay */}
+      {appState === 'intro' && (
+        <SafeErrorBoundary fallback={null}>
+          <Suspense fallback={<LoadingScreen progress={100} />}>
+            <IntroScene
+              onComplete={handleIntroComplete}
+              onSkip={handleSkipIntro}
+            />
+          </Suspense>
+        </SafeErrorBoundary>
+      )}
+
+      {/* ── Main App Shell ── */}
+      <div className={`relative z-10 transition-opacity duration-500 ${appState === 'main' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <Navbar />
         <main>
           <Hero />
@@ -154,23 +170,4 @@ export default function App() {
       </div>
     </>
   );
-
-  if (appState === 'loading') {
-    return <LoadingScreen progress={loadingProgress} />;
-  }
-
-  if (appState === 'intro') {
-    return (
-      <SafeErrorBoundary fallback={mainPortfolio}>
-        <Suspense fallback={<LoadingScreen progress={100} />}>
-          <IntroScene
-            onComplete={handleIntroComplete}
-            onSkip={handleSkipIntro}
-          />
-        </Suspense>
-      </SafeErrorBoundary>
-    );
-  }
-
-  return mainPortfolio;
 }
