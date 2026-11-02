@@ -156,18 +156,13 @@ export default function App() {
   );
 
   if (appState === 'loading') {
-    return (
-      <LoadingScreen
-        progress={loadingProgress}
-        onSkip={handleSkipIntro}
-      />
-    );
+    return <LoadingScreen progress={loadingProgress} />;
   }
 
   if (appState === 'intro') {
     return (
       <SafeErrorBoundary fallback={mainPortfolio}>
-        <Suspense fallback={<LoadingScreen progress={100} onSkip={handleSkipIntro} />}>
+        <Suspense fallback={<LoadingScreen progress={100} />}>
           <IntroScene
             onComplete={handleIntroComplete}
             onSkip={handleSkipIntro}

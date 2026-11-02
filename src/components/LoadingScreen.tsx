@@ -1,12 +1,10 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
 
 interface LoadingScreenProps {
   progress: number;
-  onSkip?: () => void;
 }
 
-export default function LoadingScreen({ progress, onSkip }: LoadingScreenProps) {
+export default function LoadingScreen({ progress }: LoadingScreenProps) {
   const pct = Math.min(Math.max(Math.round(progress), 0), 100);
   const circumference = 2 * Math.PI * 54; // r=54
   const dashOffset = circumference - (pct / 100) * circumference;
@@ -79,19 +77,6 @@ export default function LoadingScreen({ progress, onSkip }: LoadingScreenProps) 
             />
           ))}
         </div>
-
-        {/* Skip button so user NEVER gets stuck */}
-        {onSkip && (
-          <button
-            type="button"
-            onClick={onSkip}
-            className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-orbitron font-semibold tracking-wider text-cyan-DEFAULT/90 hover:text-space-950 hover:bg-cyan-DEFAULT glass border-glow transition-all duration-200 cursor-pointer shadow-cyan-sm hover:scale-105 active:scale-95"
-            aria-label="Skip to portfolio"
-          >
-            <span>ENTER DIRECTLY</span>
-            <ArrowRight size={13} />
-          </button>
-        )}
       </div>
     </div>
   );
