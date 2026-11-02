@@ -81,3 +81,4 @@
 - **Education:** Siddhartha College, Weligama & Uva Wellassa University of Sri Lanka
 - **Contact:** Smooth-scroll contact link with email & social links
 - **Download CV:** Linked directly to `/cv.pdf`
+

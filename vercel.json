@@ -10,6 +10,15 @@
   ],
   "headers": [
     {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -19,7 +28,7 @@
       ]
     },
     {
-      "source": "/(.*).(woff2|woff|ttf|svg|png|jpg|jpeg|webp|ico)",
+      "source": "/(.*).(woff2|woff|ttf|svg|png|jpg|jpeg|webp|ico|mp4|webm)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -29,4 +38,3 @@
     }
   ]
 }
-

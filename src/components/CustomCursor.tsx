@@ -1,23 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 
 /**
- * CustomCursor — glowing dot + ring that follows the mouse.
- * Automatically hidden on touch devices via CSS (body cursor: auto).
+ * CustomCursor — high performance glowing dot + ring that follows the mouse.
+ * Uses event delegation on document instead of individual node listeners,
+ * ensuring high frame rates and automatic support for all dynamic elements.
  */
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Skip on touch devices
-    if (window.matchMedia('(hover: none)').matches) return;
+    // Disable on touch devices
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
 
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    let mouseX = 0, mouseY = 0;
-    let ringX = 0, ringY = 0;
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
     let rafId: number;
 
     const onMouseMove = (e: MouseEvent) => {
@@ -27,38 +30,33 @@ export default function CustomCursor() {
       dot.style.top = `${mouseY}px`;
     };
 
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
     const animate = () => {
-      ringX = lerp(ringX, mouseX, 0.12);
-      ringY = lerp(ringY, mouseY, 0.12);
+      ringX += (mouseX - ringX) * 0.16;
+      ringY += (mouseY - ringY) * 0.16;
       ring.style.left = `${ringX}px`;
       ring.style.top = `${ringY}px`;
       rafId = requestAnimationFrame(animate);
     };
     rafId = requestAnimationFrame(animate);
 
-    // Hover state on interactive elements
-    const addHover = () => document.body.classList.add('cursor-hover');
-    const removeHover = () => document.body.classList.remove('cursor-hover');
+    // Event delegation: instant & zero memory leak
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('a, button, [role="button"], input, textarea, select, label, .clickable')) {
+        document.body.classList.add('cursor-hover');
+      } else {
+        document.body.classList.remove('cursor-hover');
+      }
+    };
 
-    const interactables = document.querySelectorAll(
-      'a, button, [role="button"], input, textarea, select, label'
-    );
-    interactables.forEach((el) => {
-      el.addEventListener('mouseenter', addHover);
-      el.addEventListener('mouseleave', removeHover);
-    });
-
-    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mouseover', onMouseOver, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseover', onMouseOver);
       cancelAnimationFrame(rafId);
-      interactables.forEach((el) => {
-        el.removeEventListener('mouseenter', addHover);
-        el.removeEventListener('mouseleave', removeHover);
-      });
+      document.body.classList.remove('cursor-hover');
     };
   }, []);
 
@@ -69,4 +67,3 @@ export default function CustomCursor() {
     </>
   );
 }
-

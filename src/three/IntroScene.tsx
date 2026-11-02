@@ -501,8 +501,16 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
   // Video completion handler -> Final warp flash into Portfolio
   const handleVideoEnded = useCallback(() => {
     setStage('warp');
-    setTimeout(() => setShowFlash(true), 600);
-    setTimeout(() => onComplete(), 1000);
+    setTimeout(() => setShowFlash(true), 400);
+    setTimeout(() => onComplete(), 800);
+  }, [onComplete]);
+
+  // Global failsafe: Intro never freezes or traps the visitor
+  useEffect(() => {
+    const maxSafetyTimer = setTimeout(() => {
+      onComplete();
+    }, 11000);
+    return () => clearTimeout(maxSafetyTimer);
   }, [onComplete]);
 
   // Fallback timer if video does not fire ended
@@ -510,7 +518,7 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
     if (stage === 'briefing') {
       const timer = setTimeout(() => {
         handleVideoEnded();
-      }, 7800);
+      }, 7000);
       return () => clearTimeout(timer);
     }
   }, [stage, handleVideoEnded]);
@@ -704,6 +712,7 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
             muted={isMuted}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={handleVideoEnded}
+            onError={handleVideoEnded}
             className="w-full h-full object-contain filter contrast-105 brightness-100 shadow-[0_0_30px_rgba(0,229,255,0.25)] rounded-lg"
           >
             <img

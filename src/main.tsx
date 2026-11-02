@@ -6,9 +6,9 @@ import './index.css';
 
 // ── Smooth scroll with Lenis ──────────────────────────────────
 const lenis = new Lenis({
-  duration: 1.2,
+  duration: 1.1,
   easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  touchMultiplier: 2,
+  touchMultiplier: 1.5,
   infinite: false,
 });
 
@@ -18,20 +18,27 @@ function raf(time: number) {
 }
 requestAnimationFrame(raf);
 
-// Expose for GSAP ScrollTrigger integration
+// Expose for GSAP ScrollTrigger integration if needed
 (window as unknown as Record<string, unknown>).__lenis__ = lenis;
 
-// ── Scroll progress bar ───────────────────────────────────────
+// ── Scroll progress bar with NaN guard ─────────────────────────
 const progressBar = document.createElement('div');
 progressBar.id = 'scroll-progress';
 document.body.appendChild(progressBar);
 
+let ticking = false;
 window.addEventListener(
   'scroll',
   () => {
-    const pct =
-      (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    progressBar.style.width = `${Math.min(pct, 100)}%`;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = max > 0 ? Math.min(Math.max((window.scrollY / max) * 100, 0), 100) : 0;
+        progressBar.style.width = `${pct}%`;
+        ticking = false;
+      });
+      ticking = true;
+    }
   },
   { passive: true }
 );
@@ -41,4 +48,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>
 );
-

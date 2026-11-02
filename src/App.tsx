@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, lazy } from 'react';
+import React, { Suspense, useState, useEffect, lazy, Component, ErrorInfo, ReactNode } from 'react';
 import { useReducedMotion } from './hooks/useReducedMotion';
 import { useWebGL } from './hooks/useWebGL';
 import CustomCursor from './components/CustomCursor';
@@ -18,13 +18,45 @@ const IntroScene = lazy(() => import('./three/IntroScene'));
 
 type AppState = 'loading' | 'intro' | 'main';
 
+// ── Error Boundary to prevent 3D WebGL crashes from breaking the UI ────────
+interface ErrorBoundaryProps {
+  fallback: ReactNode;
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class SafeErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.warn('Recovered from 3D/Canvas rendering issue:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const reducedMotion = useReducedMotion();
   const webGL = useWebGL();
 
-  // Session-based intro: show once per session
+  // Session-based intro: show once per session; bypass directly if no WebGL or reduced motion
   const hasSeenIntro =
-    reducedMotion || sessionStorage.getItem('introSeen') === 'true';
+    reducedMotion || !webGL || sessionStorage.getItem('introSeen') === 'true';
 
   const [appState, setAppState] = useState<AppState>(
     hasSeenIntro ? 'main' : 'loading'
@@ -32,30 +64,49 @@ export default function App() {
 
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  // Simulate asset loading progress
+  // Asset loading progress: Smooth 3-second sci-fi loading sequence
   useEffect(() => {
     if (appState !== 'loading') return;
+
+    // Safety watchdog timer: Never stuck on loading
+    const failsafeTimer = setTimeout(() => {
+      setAppState('intro');
+    }, 3800);
+
     const interval = setInterval(() => {
-      setLoadingProgress((p) => {
-        if (p >= 100) {
+      setLoadingProgress((prev) => {
+        // Average ~2.2% per 65ms tick => ~2.7s to reach 100%
+        const increment = Math.random() * 1.8 + 1.4;
+        const next = prev + increment;
+        if (next >= 100) {
           clearInterval(interval);
-          setTimeout(() => setAppState('intro'), 300);
+          clearTimeout(failsafeTimer);
+          // Hold at 100% for 350ms so user clearly sees completed 100% (~3s total)
+          setTimeout(() => setAppState('intro'), 350);
           return 100;
         }
-        return p + Math.random() * 12;
+        return next;
       });
-    }, 120);
-    return () => clearInterval(interval);
+    }, 65);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(failsafeTimer);
+    };
   }, [appState]);
 
   useEffect(() => {
     const handleReplay = () => {
       sessionStorage.removeItem('introSeen');
-      setAppState('intro');
+      if (webGL && !reducedMotion) {
+        setAppState('intro');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     };
     window.addEventListener('replay-intro', handleReplay);
     return () => window.removeEventListener('replay-intro', handleReplay);
-  }, []);
+  }, [webGL, reducedMotion]);
 
   const handleIntroComplete = () => {
     sessionStorage.setItem('introSeen', 'true');
@@ -67,31 +118,19 @@ export default function App() {
     setAppState('main');
   };
 
-  if (appState === 'loading') {
-    return <LoadingScreen progress={loadingProgress} />;
-  }
-
-  if (appState === 'intro') {
-    return (
-      <Suspense fallback={<LoadingScreen progress={100} />}>
-        <IntroScene
-          onComplete={handleIntroComplete}
-          onSkip={handleSkipIntro}
-        />
-      </Suspense>
-    );
-  }
-
-  return (
+  // Main portfolio layout
+  const mainPortfolio = (
     <>
       {/* Custom cursor (desktop only) */}
       <CustomCursor />
 
-      {/* Persistent 3D wave background - loads immediately */}
+      {/* Persistent 3D wave background - with ErrorBoundary fallback */}
       {webGL && !reducedMotion && (
-        <div className="canvas-bg">
-          <WaveBackground />
-        </div>
+        <SafeErrorBoundary fallback={null}>
+          <div className="canvas-bg">
+            <WaveBackground />
+          </div>
+        </SafeErrorBoundary>
       )}
 
       {/* ── App shell ── */}
@@ -109,4 +148,28 @@ export default function App() {
       </div>
     </>
   );
+
+  if (appState === 'loading') {
+    return (
+      <LoadingScreen
+        progress={loadingProgress}
+        onSkip={handleSkipIntro}
+      />
+    );
+  }
+
+  if (appState === 'intro') {
+    return (
+      <SafeErrorBoundary fallback={mainPortfolio}>
+        <Suspense fallback={<LoadingScreen progress={100} onSkip={handleSkipIntro} />}>
+          <IntroScene
+            onComplete={handleIntroComplete}
+            onSkip={handleSkipIntro}
+          />
+        </Suspense>
+      </SafeErrorBoundary>
+    );
+  }
+
+  return mainPortfolio;
 }
