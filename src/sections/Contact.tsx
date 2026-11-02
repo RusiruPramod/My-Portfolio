@@ -1,6 +1,13 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Mail, MapPin, CheckCircle, AlertCircle } from 'lucide-react';
+import {
+  Send,
+  Mail,
+  MapPin,
+  CheckCircle,
+  AlertCircle,
+  Phone,
+} from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
 import GlassCard from '../components/GlassCard';
 import SocialLinks from '../components/SocialLinks';
@@ -24,11 +31,16 @@ export default function Contact() {
   const reducedMotion = useReducedMotion();
 
   const [form, setForm] = useState<FormState>({
-    name: '', email: '', subject: '', message: '',
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
   });
   const [status, setStatus] = useState<FormStatus>('idle');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
@@ -42,7 +54,10 @@ export default function Contact() {
       try {
         const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
           body: JSON.stringify(form),
         });
         if (res.ok) {
@@ -56,7 +71,11 @@ export default function Contact() {
       }
     } else {
       // Fallback: open mailto
-      const mailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)}`;
+      const mailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+        form.subject
+      )}&body=${encodeURIComponent(
+        `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+      )}`;
       window.location.href = mailto;
       setTimeout(() => {
         setStatus('success');
@@ -115,10 +134,14 @@ export default function Contact() {
                   className="mb-4"
                 />
                 <div className="mb-6">
-                  <label className="block text-xs font-orbitron text-white/50 tracking-widest mb-2 uppercase">
+                  <label
+                    htmlFor="message"
+                    className="block text-xs font-orbitron text-white/50 tracking-widest mb-2 uppercase"
+                  >
                     Message
                   </label>
                   <textarea
+                    id="message"
                     name="message"
                     value={form.message}
                     onChange={handleChange}
@@ -126,7 +149,7 @@ export default function Contact() {
                     placeholder="Tell me about your project..."
                     required
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white/80 text-sm font-sans placeholder:text-white/25 focus:border-cyan-DEFAULT/50 focus:outline-none transition-colors resize-none"
-        style={{ background: 'rgba(255,255,255,0.05)' }}
+                    style={{ background: 'rgba(255,255,255,0.05)' }}
                     aria-label="Message"
                   />
                 </div>
@@ -135,7 +158,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-space font-semibold text-space-900 bg-cyan-DEFAULT hover:bg-cyan-bright disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 shadow-cyan-sm hover:shadow-cyan-md"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-space font-semibold text-space-900 bg-cyan-DEFAULT hover:bg-cyan-bright disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 shadow-cyan-sm hover:shadow-cyan-md cursor-pointer"
                   aria-live="polite"
                 >
                   {status === 'sending' ? (
@@ -153,13 +176,19 @@ export default function Contact() {
 
                 {/* Status messages */}
                 {status === 'success' && (
-                  <div role="alert" className="mt-4 flex items-center gap-2 text-sm text-emerald-400 font-space">
+                  <div
+                    role="alert"
+                    className="mt-4 flex items-center gap-2 text-sm text-emerald-400 font-space"
+                  >
                     <CheckCircle size={16} />
-                    Message sent! I'll get back to you soon.
+                    Message sent! I&apos;ll get back to you soon.
                   </div>
                 )}
                 {status === 'error' && (
-                  <div role="alert" className="mt-4 flex items-center gap-2 text-sm text-red-400 font-space">
+                  <div
+                    role="alert"
+                    className="mt-4 flex items-center gap-2 text-sm text-red-400 font-space"
+                  >
                     <AlertCircle size={16} />
                     Something went wrong. Please try again or email me directly.
                   </div>
@@ -176,12 +205,13 @@ export default function Contact() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="flex flex-col gap-6"
           >
-            {/* Contact info */}
+            {/* Contact info card */}
             <GlassCard className="p-6">
               <h3 className="font-orbitron text-base font-semibold text-gradient-blue mb-5">
                 Let&apos;s Connect
               </h3>
               <div className="space-y-4">
+                {/* Email */}
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg glass border-glow flex items-center justify-center flex-shrink-0">
                     <Mail size={15} className="text-cyan-DEFAULT" />
@@ -190,19 +220,42 @@ export default function Contact() {
                     <p className="text-white/40 text-xs font-orbitron tracking-widest">EMAIL</p>
                     <a
                       href={`mailto:${siteConfig.email}`}
-                      className="text-white/80 text-sm font-space hover:text-cyan-DEFAULT transition-colors"
+                      className="text-white/80 text-sm font-space hover:text-cyan-DEFAULT transition-colors break-all"
                     >
                       {siteConfig.email}
                     </a>
                   </div>
                 </div>
+
+                {/* Phone & Mobile */}
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg glass border-glow flex items-center justify-center flex-shrink-0">
+                    <Phone size={15} className="text-cyan-DEFAULT" />
+                  </div>
+                  <div>
+                    <p className="text-white/40 text-xs font-orbitron tracking-widest">
+                      PHONE &amp; MOBILE
+                    </p>
+                    <a
+                      href="tel:+94787970764"
+                      className="text-white/80 text-sm font-space hover:text-cyan-DEFAULT transition-colors block"
+                    >
+                      {siteConfig.mobileFormatted}
+                    </a>
+                    <span className="text-white/50 text-xs font-space">
+                      Tel: {siteConfig.phone}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Location */}
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg glass border-glow flex items-center justify-center flex-shrink-0">
                     <MapPin size={15} className="text-cyan-DEFAULT" />
                   </div>
                   <div>
                     <p className="text-white/40 text-xs font-orbitron tracking-widest">LOCATION</p>
-                    <p className="text-white/80 text-sm font-space">Colombo, Sri Lanka 🇱🇰</p>
+                    <p className="text-white/80 text-sm font-space">Colombo, Sri Lanka</p>
                   </div>
                 </div>
               </div>
@@ -228,8 +281,9 @@ export default function Contact() {
                     <ContactGlobe />
                   </Suspense>
                   <div className="absolute bottom-3 left-0 right-0 text-center">
-                    <span className="text-xs font-orbitron text-cyan-DEFAULT/60 tracking-widest">
-                      📍 SRI LANKA
+                    <span className="text-xs font-orbitron text-cyan-DEFAULT/80 tracking-widest inline-flex items-center gap-1.5 justify-center">
+                      <MapPin size={11} className="text-cyan-DEFAULT" />
+                      SRI LANKA
                     </span>
                   </div>
                 </div>
@@ -254,10 +308,22 @@ interface FormFieldProps {
   className?: string;
 }
 
-function FormField({ label, name, type, value, onChange, placeholder, required, className = '' }: FormFieldProps) {
+function FormField({
+  label,
+  name,
+  type,
+  value,
+  onChange,
+  placeholder,
+  required,
+  className = '',
+}: FormFieldProps) {
   return (
     <div className={className}>
-      <label htmlFor={name} className="block text-xs font-orbitron text-white/50 tracking-widest mb-2 uppercase">
+      <label
+        htmlFor={name}
+        className="block text-xs font-orbitron text-white/50 tracking-widest mb-2 uppercase"
+      >
         {label}
       </label>
       <input

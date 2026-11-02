@@ -54,7 +54,7 @@ export default function Hero() {
           </div>
 
           <p className="text-white/55 font-sans text-base leading-relaxed max-w-lg mx-auto lg:mx-0">
-            Innovative Software & IoT Specialist passionate about building
+            Innovative Software &amp; IoT Specialist passionate about building
             futuristic, scalable solutions — from full-stack web apps to
             embedded systems and beyond.
           </p>
@@ -64,7 +64,7 @@ export default function Hero() {
             <a
               href={siteConfig.cvUrl}
               download
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-space font-semibold text-space-900 bg-cyan-DEFAULT hover:bg-cyan-bright transition-all duration-200 shadow-cyan-md hover:shadow-cyan-lg hover:-translate-y-0.5 active:translate-y-0 btn-glow"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-space font-semibold text-cyan-DEFAULT glass border-glow hover:bg-cyan-DEFAULT hover:text-space-950 transition-all duration-200 shadow-cyan-md hover:shadow-cyan-lg hover:-translate-y-0.5 active:translate-y-0"
               aria-label="Download CV"
             >
               <Download size={17} />
@@ -73,7 +73,7 @@ export default function Hero() {
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-space font-semibold text-cyan-DEFAULT glass border-glow hover:border-cyan-DEFAULT/60 transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-space font-semibold text-white/80 glass border-glow hover:border-cyan-DEFAULT hover:text-cyan-DEFAULT hover:bg-cyan-DEFAULT/10 transition-all duration-200 hover:-translate-y-0.5"
             >
               Get In Touch
             </a>

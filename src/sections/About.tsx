@@ -16,17 +16,34 @@ function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
     const step = to / 40;
     const timer = setInterval(() => {
       start += step;
-      if (start >= to) { setVal(to); clearInterval(timer); }
-      else setVal(Math.floor(start));
+      if (start >= to) {
+        setVal(to);
+        clearInterval(timer);
+      } else {
+        setVal(Math.floor(start));
+      }
     }, 35);
     return () => clearInterval(timer);
   }, [inView, to]);
 
-  return <span ref={ref}>{val}{suffix}</span>;
+  return (
+    <span ref={ref}>
+      {val}
+      {suffix}
+    </span>
+  );
 }
 
 // ── Skill bar ─────────────────────────────────────────────────
-function SkillBar({ name, level, inView }: { name: string; level: number; inView: boolean }) {
+function SkillBar({
+  name,
+  level,
+  inView,
+}: {
+  name: string;
+  level: number;
+  inView: boolean;
+}) {
   return (
     <div>
       <div className="flex justify-between mb-1.5">
@@ -50,9 +67,10 @@ export default function About() {
   const statsRef = useRef<HTMLDivElement>(null);
   const statsInView = useInView(statsRef, { once: true });
 
-  const filteredSkills = activeCategory === 'All'
-    ? skills
-    : skills.filter((s) => s.category === activeCategory);
+  const filteredSkills =
+    activeCategory === 'All'
+      ? skills
+      : skills.filter((s) => s.category === activeCategory);
 
   return (
     <section id="about" className="relative section-padding" aria-label="About section">
@@ -146,4 +164,3 @@ export default function About() {
     </section>
   );
 }
-

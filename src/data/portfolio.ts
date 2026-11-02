@@ -1,5 +1,5 @@
 // ============================================================
-// PORTFOLIO DATA — edit this file to update all content!
+// PORTFOLIO DATA — Rusiru Pramod
 // ============================================================
 
 export const siteConfig = {
@@ -9,8 +9,13 @@ export const siteConfig = {
   description:
     'Innovative, results-driven Software and IoT Specialist with expertise in full-stack development, cybersecurity, IoT systems, industrial automation, UI/UX design, and cloud computing.',
   email: 'rusirupramod@gmail.com',
+  phone: '+94 41 22 535 12',
+  mobile: '0787970764 | 075 543 7148',
+  mobileFormatted: '+94 78 797 0764 / +94 75 543 7148',
   cvUrl: '/cv.pdf',
   profileImage: '/profile.jpg',
+  degree: 'Bachelor of Information and Communication Technology (Honours)',
+  university: 'Uva Wellassa University of Sri Lanka',
 };
 
 export const socialLinks = [
@@ -67,21 +72,21 @@ export const aboutData = {
 
 export const skills = [
   // Frontend
-  { name: 'React / Next.js', level: 88, category: 'Frontend' },
-  { name: 'TypeScript', level: 82, category: 'Frontend' },
-  { name: 'Tailwind CSS / UI/UX', level: 90, category: 'Frontend' },
+  { name: 'React / Next.js', level: 90, category: 'Frontend' },
+  { name: 'TypeScript / JavaScript', level: 88, category: 'Frontend' },
+  { name: 'Tailwind CSS / UI/UX', level: 92, category: 'Frontend' },
   // Backend
-  { name: 'Node.js / Express', level: 80, category: 'Backend' },
-  { name: 'Python / Django', level: 78, category: 'Backend' },
-  { name: 'Firebase / Supabase', level: 75, category: 'Backend' },
+  { name: 'Node.js / Express', level: 88, category: 'Backend' },
+  { name: 'Java / C#', level: 82, category: 'Backend' },
+  { name: 'Firebase / Supabase / MySQL', level: 85, category: 'Backend' },
   // Embedded / IoT
-  { name: 'Arduino / ESP32', level: 92, category: 'IoT' },
-  { name: 'C / C++', level: 85, category: 'IoT' },
-  { name: 'MQTT / Node-RED', level: 80, category: 'IoT' },
-  // Cloud / Security
-  { name: 'AWS / GCP Basics', level: 65, category: 'Cloud' },
+  { name: 'Arduino / ESP32', level: 94, category: 'IoT' },
+  { name: 'C / C++', level: 88, category: 'IoT' },
+  { name: 'Sensor Integration & Automation', level: 90, category: 'IoT' },
+  // Cloud / Tools
+  { name: 'AWS / Vercel Basics', level: 75, category: 'Cloud' },
   { name: 'Cybersecurity', level: 72, category: 'Cloud' },
-  { name: 'Linux / Bash', level: 78, category: 'Cloud' },
+  { name: 'Git / GitHub', level: 90, category: 'Cloud' },
 ];
 
 export const skillCategories = ['All', 'Frontend', 'Backend', 'IoT', 'Cloud'];
@@ -142,15 +147,14 @@ export const projects = [
     github: 'https://github.com/RusiruPramod',
     live: '',
     image: '/projects/project1.jpg',
-
     featured: true,
   },
   {
     id: 2,
     title: 'Smart Student Attendance System',
     description:
-      'Real-time attendance tracking web app with facial recognition integration. Built with React.js, Firebase, and a Node.js backend.',
-    tech: ['React', 'Firebase', 'Node.js', 'Face API'],
+      'A real-time web application for attendance, scheduling, and data analysis for educational institutions. Built with React.js, Node.js, and Express.js.',
+    tech: ['React.js', 'Node.js', 'Express.js', 'JavaScript', 'HTML5/CSS3'],
     category: 'Web',
     github: 'https://github.com/RusiruPramod',
     live: '',
@@ -159,10 +163,10 @@ export const projects = [
   },
   {
     id: 3,
-    title: 'Industrial Automation Solutions',
+    title: 'Autonomous Vehicle According to Color Light',
     description:
-      'PLC-based automation system for smart machines with SCADA dashboard, real-time monitoring, and predictive maintenance alerts.',
-    tech: ['PLC', 'SCADA', 'C++', 'Modbus', 'HMI'],
+      'Developed an Arduino-based system using color sensors, IR, and RF signals for traffic light detection and action control. Integrated Front Vehicle Detection (FCR) mode for real-time monitoring and safe driving.',
+    tech: ['Arduino', 'C++', 'Color Sensors', 'IR & RF Signals', 'FCR Mode'],
     category: 'Automation',
     github: 'https://github.com/RusiruPramod',
     live: '',
@@ -171,22 +175,10 @@ export const projects = [
   },
   {
     id: 4,
-    title: 'Fitness Tracking App',
+    title: 'Hotel Booking & Management System',
     description:
-      'Mobile-first fitness application with workout plans, exercise tracking, progress charts, and nutritional guidance powered by a custom Node.js API.',
-    tech: ['React Native', 'Node.js', 'MongoDB', 'Chart.js'],
-    category: 'Mobile',
-    github: 'https://github.com/RusiruPramod',
-    live: '',
-    image: '/projects/project2.jpg',
-    featured: false,
-  },
-  {
-    id: 5,
-    title: 'Community Management System',
-    description:
-      'Full-featured community platform for event planning, member communication, and resource allocation. Built with React.js and Firebase.',
-    tech: ['React', 'Firebase', 'Tailwind', 'Firestore'],
+      'Developed a React-based hotel booking system featuring responsive UI, attractive customized designs, room reservations, booking management, customer registration, and availability tracking.',
+    tech: ['React.js', 'Tailwind CSS', 'Node.js', 'Express.js', 'REST APIs'],
     category: 'Web',
     github: 'https://github.com/RusiruPramod',
     live: '',
@@ -194,11 +186,23 @@ export const projects = [
     featured: false,
   },
   {
+    id: 5,
+    title: 'Gym Management System',
+    description:
+      'Developed a web-based gym management system featuring QR code scanning and fingerprint authentication for member identification, attendance tracking, membership management, and fitness data analysis.',
+    tech: ['React.js', 'Node.js', 'QR Code Scanning', 'Fingerprint Biometrics', 'MySQL'],
+    category: 'Web',
+    github: 'https://github.com/RusiruPramod',
+    live: '',
+    image: '/projects/project2.png',
+    featured: false,
+  },
+  {
     id: 6,
     title: 'WinIt Auction Platform',
     description:
-      'Full auction system with live bidding, user authentication, payment integration, and admin dashboard. Developed with HTML, JSP, and MySQL.',
-    tech: ['JSP', 'MySQL', 'HTML/CSS', 'JavaScript'],
+      'This Auction web application, developed with NetBeans IDE, uses HTML, CSS, JSP, Servlets, and Bootstrap for responsiveness, MySQL for bid data management, and Figma for design prototyping.',
+    tech: ['JSP', 'Servlets', 'MySQL', 'Bootstrap', 'Figma'],
     category: 'Web',
     github: 'https://github.com/RusiruPramod',
     live: '',
@@ -207,47 +211,57 @@ export const projects = [
   },
 ];
 
-export const projectCategories = ['All', 'Web', 'IoT', 'Mobile', 'Automation'];
+export const projectCategories = ['All', 'Web', 'IoT', 'Automation'];
 
 export const timeline = [
   {
+    type: 'experience',
+    year: 'Nov 2025 – May 2026',
+    title: 'Associate Software Engineer (Remote)',
+    org: 'Residue Solution (Pvt) Ltd',
+    location: 'Remote, Sri Lanka',
+    description:
+      'Engineering scalable web systems, backend services, cloud integrations, and remote full-stack architecture.',
+    icon: 'Briefcase',
+  },
+  {
+    type: 'experience',
+    year: 'May 2025 – Nov 2025',
+    title: 'Intern – Full-Stack Software Engineer',
+    org: 'Residue Solution (Pvt) Ltd',
+    location: 'Sri Lanka',
+    description:
+      'Contributed to full-stack web software, REST API development, frontend component architecture, database operations, and testing.',
+    icon: 'Code2',
+  },
+  {
+    type: 'experience',
+    year: '2019 – Present',
+    title: 'Lead Technical Specialist & Developer',
+    org: 'Freelance Technical Projects',
+    location: 'Sri Lanka / Remote',
+    description:
+      'IoT & electronic project planning & implementation, graphic design & photography (Photoshop), videography & sound editing, automation machine repair (CNC, PLC systems), electrical and electronics.',
+    icon: 'Cpu',
+  },
+  {
     type: 'education',
-    year: '2021 – Present',
-    title: 'BSc in Industrial Information Technology',
-    org: 'Uva Wellassa University of Sri Lanka',
+    year: '2022 – 2026 (Expected)',
+    title: 'Bachelor of Information and Communication Technology (Honours)',
+    org: 'Faculty of Technological Studies, Uva Wellassa University of Sri Lanka',
     location: 'Badulla, Sri Lanka',
     description:
-      'Specializing in software engineering, IoT systems, industrial automation, and cybersecurity. Active member of the IEEE Student Branch and Tech Club.',
+      'Specializing in Software Development, IoT & Embedded Systems, Database Management, and Automation Engineering.',
     icon: 'GraduationCap',
   },
   {
     type: 'education',
     year: '2009 – 2020',
-    title: 'Secondary Education (A/L — Physical Science)',
-    org: 'Nalanda College, Colombo',
-    location: 'Colombo, Sri Lanka',
+    title: 'Secondary Education (A/L — Technology Stream)',
+    org: 'Siddhartha College, Weligama',
+    location: 'Weligama, Sri Lanka',
     description:
-      'Completed Advanced Level examinations in Combined Mathematics, Physics, and ICT. School IT Club vice-president.',
+      'Completed G.C.E. Advanced Level examinations in Technology Stream (SFT, ET, ICT).',
     icon: 'BookOpen',
-  },
-  {
-    type: 'experience',
-    year: '2024',
-    title: 'IoT Systems Developer (Intern)',
-    org: 'Tech Startup — Sri Lanka',
-    location: 'Remote',
-    description:
-      'Developed ESP32-based sensor nodes and MQTT pipelines. Built real-time monitoring dashboards with React and Firebase.',
-    icon: 'Cpu',
-  },
-  {
-    type: 'experience',
-    year: '2023',
-    title: 'Full-Stack Web Developer (Freelance)',
-    org: 'Multiple Clients',
-    location: 'Remote',
-    description:
-      'Delivered 5+ client projects including e-commerce sites, management systems, and landing pages using React, Node.js, and Firebase.',
-    icon: 'Code2',
   },
 ];

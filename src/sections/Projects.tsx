@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, Sparkles } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
 import GlassCard from '../components/GlassCard';
 import { projects, projectCategories } from '../data/portfolio';
@@ -107,7 +107,9 @@ function ProjectCard({ project }: { project: typeof projects[0] }) {
 
           {/* Featured star */}
           {project.featured && (
-            <span className="absolute top-3 right-3 text-xs font-orbitron text-hud-amber">★ Featured</span>
+            <span className="absolute top-3 right-3 text-xs font-orbitron text-hud-amber inline-flex items-center gap-1">
+              <Sparkles size={11} /> Featured
+            </span>
           )}
         </div>
 

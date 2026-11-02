@@ -1,4 +1,5 @@
 import React from 'react';
+import { RotateCcw } from 'lucide-react';
 import SocialLinks from '../components/SocialLinks';
 import { siteConfig } from '../data/portfolio';
 
@@ -56,18 +57,18 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('replay-intro'))}
-              className="text-cyan-DEFAULT/75 hover:text-cyan-DEFAULT text-xs font-orbitron tracking-wider transition-colors cursor-pointer flex items-center gap-1.5 py-1 px-2.5 rounded border border-cyan-DEFAULT/25 hover:border-cyan-DEFAULT/60 glass"
+              className="text-cyan-DEFAULT hover:text-space-950 hover:bg-cyan-DEFAULT text-xs font-orbitron tracking-wider transition-all duration-200 cursor-pointer flex items-center gap-1.5 py-1.5 px-3 rounded border border-cyan-DEFAULT/30 hover:border-cyan-DEFAULT shadow-cyan-sm font-semibold"
               title="Watch cinematic intro animation again"
             >
-              <span>↺</span> REPLAY INTRO
+              <RotateCcw size={12} />
+              <span>REPLAY INTRO</span>
             </button>
             <p className="text-white/20 text-xs font-orbitron tracking-widest hidden sm:block">
-            BUILT WITH REACT + THREE.JS
-          </p>
+              BUILT WITH REACT + THREE.JS
+            </p>
+          </div>
         </div>
-      </div>
       </div>
     </footer>
   );
 }
-

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 import * as THREE from 'three';
+import { Globe, Radio, Volume2, VolumeX, Rocket, ArrowRight } from 'lucide-react';
 import { siteConfig } from '../data/portfolio';
 
 // ── Original Holographic Single Earth Globe ──────────────────
@@ -486,7 +487,7 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
   useEffect(() => {
     if (stage === 'briefing' && videoRef.current) {
       videoRef.current.currentTime = VIDEO_MAP_START_TIME;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [stage]);
 
@@ -546,13 +547,15 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
           <button
             type="button"
             onClick={() => setStage('earth')}
-            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${
-              stage === 'earth'
+            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'earth'
                 ? 'bg-cyan-DEFAULT text-space-950 font-bold shadow-cyan-sm'
                 : 'text-white/60 hover:text-white'
-            }`}
+              }`}
           >
-            🌍 3D Earth
+            <span className="inline-flex items-center gap-1.5">
+              <Globe size={12} />
+              3D Earth
+            </span>
           </button>
           <button
             type="button"
@@ -560,16 +563,18 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
               setStage('briefing');
               if (videoRef.current) {
                 videoRef.current.currentTime = VIDEO_MAP_START_TIME;
-                videoRef.current.play().catch(() => {});
+                videoRef.current.play().catch(() => { });
               }
             }}
-            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${
-              stage === 'briefing'
+            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'briefing'
                 ? 'bg-cyan-DEFAULT text-space-950 font-bold shadow-cyan-sm'
                 : 'text-white/60 hover:text-white'
-            }`}
+              }`}
           >
-            🛰️ Tactical Briefing
+            <span className="inline-flex items-center gap-1.5">
+              <Radio size={12} />
+              Tactical Briefing
+            </span>
           </button>
         </div>
 
@@ -582,20 +587,21 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
                 setIsMuted(!isMuted);
                 if (videoRef.current) videoRef.current.muted = !isMuted;
               }}
-              className="p-2 rounded-lg glass border-glow text-white/80 hover:text-cyan-DEFAULT text-xs transition-colors cursor-pointer"
+              className="p-2 rounded-lg glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-xs transition-all cursor-pointer shadow-cyan-sm"
               title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
             >
-              {isMuted ? '🔇' : '🔊'}
+              {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
             </button>
           )}
 
           <button
             type="button"
             onClick={doSkip}
-            className="px-4 py-2 glass border-glow text-white/80 hover:text-cyan-DEFAULT text-xs font-orbitron tracking-widest transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm"
+            className="px-4 py-2 glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-xs font-orbitron font-semibold tracking-widest transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm inline-flex items-center gap-1.5"
             aria-label="Skip intro animation"
           >
-            SKIP INTRO ⟶
+            <span>SKIP INTRO</span>
+            <ArrowRight size={13} />
           </button>
         </div>
       </header>
@@ -607,9 +613,8 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
           STAGE 1: ORIGINAL SINGLE EARTH + ELECTRON RINGS + WARP DIVE
          ═════════════════════════════════════════════════════════ */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 ${
-          stage === 'earth' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`absolute inset-0 transition-opacity duration-700 ${stage === 'earth' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         <Canvas
           dpr={[1, 1.5]}
@@ -665,10 +670,10 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
               setStage('briefing');
               if (videoRef.current) {
                 videoRef.current.currentTime = VIDEO_MAP_START_TIME;
-                videoRef.current.play().catch(() => {});
+                videoRef.current.play().catch(() => { });
               }
             }}
-            className="px-4 py-2.5 rounded-lg glass border-glow text-cyan-DEFAULT hover:text-white font-orbitron text-xs tracking-wider transition-all cursor-pointer flex items-center gap-2 hover:scale-105 active:scale-95"
+            className="px-4 py-2.5 rounded-lg glass border-glow text-cyan-DEFAULT hover:bg-cyan-DEFAULT hover:text-space-950 font-orbitron text-xs tracking-wider transition-all cursor-pointer flex items-center gap-2 hover:scale-105 active:scale-95 shadow-cyan-sm font-semibold"
           >
             <span>ENTER TACTICAL BRIEFING</span>
             <span>⟶</span>
@@ -680,9 +685,8 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
           STAGE 2: TACTICAL BRIEFING VIDEO + BLUE ANIMATED FREE SIDES
          ═════════════════════════════════════════════════════════ */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 bg-[#020714] flex items-center justify-between overflow-hidden ${
-          stage === 'briefing' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`absolute inset-0 transition-opacity duration-700 bg-[#020714] flex items-center justify-between overflow-hidden ${stage === 'briefing' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         {/* Dynamic Blue Ambient Glow Behind Video */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.15)_0%,transparent_75%)] pointer-events-none" />
@@ -727,9 +731,10 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
           <button
             type="button"
             onClick={handleVideoEnded}
-            className="pointer-events-auto px-4 py-1.5 rounded-lg glass border-glow text-cyan-DEFAULT hover:text-white font-orbitron text-xs tracking-wider transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm"
+            className="pointer-events-auto px-4 py-2 rounded-lg glass border-glow text-cyan-DEFAULT hover:bg-cyan-DEFAULT hover:text-space-950 font-orbitron text-xs tracking-wider transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm font-semibold inline-flex items-center gap-2"
           >
-            LAUNCH PORTFOLIO 🚀
+            <span>LAUNCH PORTFOLIO</span>
+            <Rocket size={13} />
           </button>
         </div>
       </div>
