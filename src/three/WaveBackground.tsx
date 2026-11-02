@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useState } from 'react';
+import React, { useRef, useMemo, useEffect, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useFPSMonitor } from '../hooks/useFPSMonitor';
@@ -274,6 +274,14 @@ function CameraRig({
   return null;
 }
 
+// ── Frame Monitor to verify continuous 3D rendering ────────────
+function FrameMonitor({ onFrame }: { onFrame: () => void }) {
+  useFrame(() => {
+    onFrame();
+  });
+  return null;
+}
+
 // ── Main WaveBackground Export ────────────────────────────────
 export default function WaveBackground() {
   const quality = useFPSMonitor();
@@ -283,6 +291,32 @@ export default function WaveBackground() {
   const boostRef = useRef(0);
   const keysPressed = useRef({ up: false, down: false });
   const [isAccelerating, setIsAccelerating] = useState(false);
+
+  // Health watchdog: detect if 3D animation doesn't run and auto-reload
+  const frameCountRef = useRef(0);
+  const handleFrame = useCallback(() => {
+    frameCountRef.current++;
+    // Once 30 frames render successfully, clear any reload flag
+    if (frameCountRef.current === 30) {
+      sessionStorage.removeItem('wave_reload_attempted');
+    }
+  }, []);
+
+  useEffect(() => {
+    // If after 2.8 seconds the 3D waveform has not rendered frames, auto-reload
+    const watchdogTimer = setTimeout(() => {
+      if (frameCountRef.current < 5) {
+        console.warn('3D Waveform animation not running! Triggering auto-reload...');
+        const alreadyReloaded = sessionStorage.getItem('wave_reload_attempted');
+        if (!alreadyReloaded) {
+          sessionStorage.setItem('wave_reload_attempted', 'true');
+          window.location.reload();
+        }
+      }
+    }, 2800);
+
+    return () => clearTimeout(watchdogTimer);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -337,10 +371,21 @@ export default function WaveBackground() {
           powerPreference: 'high-performance',
           stencil: false,
         }}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            console.warn('WebGL context lost! Reloading to restore 3D waveform...');
+            if (!sessionStorage.getItem('wave_reload_attempted')) {
+              sessionStorage.setItem('wave_reload_attempted', 'true');
+              window.location.reload();
+            }
+          });
+        }}
         camera={{ position: [0, 1.75, 7], fov: 62 }}
         style={{ width: '100%', height: '100%' }}
         aria-hidden="true"
       >
+        <FrameMonitor onFrame={handleFrame} />
         <CameraRig
           travelRef={travelRef}
           speedRef={speedRef}
