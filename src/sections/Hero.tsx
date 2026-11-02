@@ -99,7 +99,7 @@ export default function Hero() {
             <div className="absolute inset-0 rounded-full border border-dashed border-cyan-DEFAULT/20 animate-spin-slow" style={{ borderRadius: '47%' }} />
 
             {/* Profile image container */}
-            <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-glow-strong shadow-cyan-lg">
+            <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-glow-strong shadow-cyan-lg bg-space-900/90">
               <img
                 src={siteConfig.profileImage}
                 alt="Rusiru Pramod — Software Engineer and IoT Specialist"
@@ -107,7 +107,9 @@ export default function Hero() {
                 height={320}
                 className="w-full h-full object-cover"
                 loading="eager"
-                decoding="async"
+                decoding="sync"
+                // @ts-expect-error React 18 fetchPriority typing
+                fetchpriority="high"
               />
               {/* Holographic overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-space-900/40 via-transparent to-cyan-DEFAULT/5" />

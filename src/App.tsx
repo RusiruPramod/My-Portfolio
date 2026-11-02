@@ -64,6 +64,12 @@ export default function App() {
 
   const [loadingProgress, setLoadingProgress] = useState(0);
 
+  // Eagerly preload critical profile image during initial boot
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/profile.jpg';
+  }, []);
+
   // Asset loading progress: Smooth 3-second sci-fi loading sequence
   useEffect(() => {
     if (appState !== 'loading') return;
