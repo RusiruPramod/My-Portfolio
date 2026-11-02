@@ -223,9 +223,11 @@ function CameraController({ phase }: { phase: 0 | 1 | 2 }) {
   return null;
 }
 
-// ── Blue Animated Side Graphic (Left Panel) ──────────────────
-function TacticalSidebarLeft() {
-  const [eqHeights, setEqHeights] = useState<number[]>([12, 24, 18, 30, 22, 14, 28, 20]);
+// ── Live Voice/Audio Spectrum Hook ───────────────────────────
+function useEqualizerBars(count = 8) {
+  const [eqHeights, setEqHeights] = useState<number[]>(() =>
+    Array.from({ length: count }, (_, i) => 14 + (i % 4) * 4)
+  );
 
   useEffect(() => {
     let animId: number;
@@ -233,15 +235,22 @@ function TacticalSidebarLeft() {
     const update = () => {
       t += 0.1;
       setEqHeights(
-        [0, 1, 2, 3, 4, 5, 6, 7].map(
-          (i) => Math.sin(t * 4 + i * 0.8) * 16 + Math.cos(t * 2 + i * 0.4) * 8 + 26
+        Array.from({ length: count }, (_, i) =>
+          Math.sin(t * 4 + i * 0.8) * 14 + Math.cos(t * 2 + i * 0.4) * 7 + 24
         )
       );
       animId = requestAnimationFrame(update);
     };
     animId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [count]);
+
+  return eqHeights;
+}
+
+// ── Blue Animated Side Graphic (Left Panel) ──────────────────
+function TacticalSidebarLeft() {
+  const eqHeights = useEqualizerBars(8);
 
   return (
     <aside
@@ -421,6 +430,109 @@ function TacticalSidebarRight() {
   );
 }
 
+// ── Mobile Responsive Tactical Strip (TOP above video on mobile) ─
+function TacticalMobileTopStrip() {
+  const eqHeights = useEqualizerBars(6);
+
+  return (
+    <div
+      className="flex lg:hidden flex-col w-full pt-16 pb-2 px-3 sm:px-6 bg-gradient-to-b from-[#020714] via-[#030d22]/95 to-transparent border-b border-cyan-500/20 z-20 pointer-events-none select-none font-mono text-[11px] text-cyan-DEFAULT/80"
+      aria-label="Mobile top telemetry strip"
+    >
+      <div className="flex items-center justify-between gap-2 max-w-xl mx-auto w-full">
+        {/* Radar & Status */}
+        <div className="flex items-center gap-2">
+          <div className="relative w-8 h-8 rounded-full border border-cyan-400/50 bg-space-950/80 p-0.5 flex items-center justify-center overflow-hidden shadow-[0_0_8px_rgba(0,229,255,0.3)]">
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background:
+                  'conic-gradient(from 0deg, rgba(0, 229, 255, 0.5) 0deg, transparent 75deg, transparent 360deg)',
+                animation: 'radar-rotate 3s linear infinite',
+              }}
+            />
+            <div className="w-1 h-1 rounded-full bg-white shadow-[0_0_4px_#00e5ff] animate-ping" />
+          </div>
+          <div>
+            <div className="font-orbitron font-bold text-[10px] text-white flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-DEFAULT animate-ping" />
+              RADAR // L-SEC 01
+            </div>
+            <div className="text-[9px] text-white/50">LAT: 06°55&apos;N // LON: 79°52&apos;E</div>
+          </div>
+        </div>
+
+        {/* Audio Spectrum Equalizer */}
+        <div className="flex items-center gap-2 glass px-2 py-1 rounded-lg border border-cyan-400/30">
+          <div className="flex items-end h-5 gap-0.5">
+            {eqHeights.map((h, i) => (
+              <div
+                key={i}
+                className="w-1 rounded-sm bg-gradient-to-t from-hud-blue to-cyan-DEFAULT"
+                style={{ height: `${Math.max(h * 0.45, 3)}px` }}
+              />
+            ))}
+          </div>
+          <div className="text-[9px] text-emerald-400 font-bold hidden xs:block">
+            SAT-LINK ACTIVE
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Mobile Responsive Tactical Strip (BOTTOM below video on mobile) ─
+function TacticalMobileBottomStrip() {
+  return (
+    <div
+      className="flex lg:hidden flex-col w-full pt-2 pb-16 px-3 sm:px-6 bg-gradient-to-t from-[#020714] via-[#030d22]/95 to-transparent border-t border-cyan-500/20 z-20 pointer-events-none select-none font-mono text-[11px] text-cyan-DEFAULT/80"
+      aria-label="Mobile bottom telemetry strip"
+    >
+      <div className="flex items-center justify-between gap-2 max-w-xl mx-auto w-full">
+        {/* ID Info */}
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1 text-white font-orbitron font-bold text-[10px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-DEFAULT animate-ping" />
+            <span>RUSIRU PRAMOD</span>
+          </div>
+          <div className="text-[9px] text-white/60">ROLE: Software &amp; IoT</div>
+          <div className="text-[9px] text-emerald-400">CLEARANCE: LEVEL 5 TOP SECRET</div>
+        </div>
+
+        {/* Sine Wave Oscilloscope */}
+        <div className="flex flex-col items-end gap-0.5">
+          <div className="w-20 h-4 overflow-hidden">
+            <svg viewBox="0 0 100 20" className="w-full h-full">
+              <path
+                d="M 0,10 Q 12,2 25,10 T 50,10 T 75,10 T 100,10"
+                fill="none"
+                stroke="#00e5ff"
+                strokeWidth="1.6"
+                className="drop-shadow-[0_0_3px_#00e5ff]"
+              >
+                <animate
+                  attributeName="d"
+                  dur="1.8s"
+                  repeatCount="indefinite"
+                  values="
+                    M 0,10 Q 12,2 25,10 T 50,10 T 75,10 T 100,10;
+                    M 0,10 Q 12,18 25,10 T 50,10 T 75,10 T 100,10;
+                    M 0,10 Q 12,2 25,10 T 50,10 T 75,10 T 100,10
+                  "
+                />
+              </path>
+            </svg>
+          </div>
+          <div className="text-[8px] text-cyan-DEFAULT/70 tracking-wider">
+            TELEMETRY: LOCKED // 100%
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main IntroScene Component ────────────────────────────────
 interface IntroSceneProps {
   onComplete: () => void;
@@ -537,11 +649,11 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
       `}</style>
 
       {/* ── Top Header Navigation Bar ── */}
-      <header className="fixed top-4 inset-x-6 z-50 flex items-center justify-between gap-4 pointer-events-auto">
-        <div className="flex items-center gap-3">
-          <div className="font-orbitron font-black text-sm sm:text-base tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,229,255,0.7)] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-DEFAULT animate-ping" />
-            <span>RUSIRU PRAMOD</span>
+      <header className="fixed top-2 sm:top-4 inset-x-3 sm:inset-x-6 z-50 flex items-center justify-between gap-1.5 sm:gap-4 pointer-events-auto">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="font-orbitron font-black text-xs sm:text-base tracking-widest text-white drop-shadow-[0_0_10px_rgba(0,229,255,0.7)] flex items-center gap-1.5 sm:gap-2">
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-DEFAULT animate-ping" />
+            <span className="truncate max-w-[110px] xs:max-w-none">RUSIRU PRAMOD</span>
           </div>
           <span className="hidden md:inline-block px-2.5 py-0.5 rounded bg-cyan-DEFAULT/15 border border-cyan-400/30 text-cyan-DEFAULT font-mono text-[10px] tracking-wider">
             {stage === 'earth' && 'PHASE 1: 3D HOLOGRAPHIC EARTH // ORBIT'}
@@ -551,18 +663,18 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center gap-1.5 p-1 rounded-lg glass border-glow">
+        <div className="flex items-center gap-1 p-0.5 sm:p-1 rounded-lg glass border-glow">
           <button
             type="button"
             onClick={() => setStage('earth')}
-            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'earth'
+            className={`px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'earth'
                 ? 'bg-cyan-DEFAULT text-space-950 font-bold shadow-cyan-sm'
                 : 'text-white/60 hover:text-white'
               }`}
           >
-            <span className="inline-flex items-center gap-1.5">
-              <Globe size={12} />
-              3D Earth
+            <span className="inline-flex items-center gap-1 sm:gap-1.5">
+              <Globe size={11} />
+              <span className="hidden xs:inline">3D Earth</span>
             </span>
           </button>
           <button
@@ -574,20 +686,20 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
                 videoRef.current.play().catch(() => { });
               }
             }}
-            className={`px-3 py-1 rounded text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'briefing'
+            className={`px-2 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-orbitron tracking-wider transition-all cursor-pointer ${stage === 'briefing'
                 ? 'bg-cyan-DEFAULT text-space-950 font-bold shadow-cyan-sm'
                 : 'text-white/60 hover:text-white'
               }`}
           >
-            <span className="inline-flex items-center gap-1.5">
-              <Radio size={12} />
-              Tactical Briefing
+            <span className="inline-flex items-center gap-1 sm:gap-1.5">
+              <Radio size={11} />
+              <span className="hidden xs:inline">Briefing</span>
             </span>
           </button>
         </div>
 
         {/* Audio Toggle & Skip Intro */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {stage === 'briefing' && (
             <button
               type="button"
@@ -595,21 +707,21 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
                 setIsMuted(!isMuted);
                 if (videoRef.current) videoRef.current.muted = !isMuted;
               }}
-              className="p-2 rounded-lg glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-xs transition-all cursor-pointer shadow-cyan-sm"
+              className="p-1.5 sm:p-2 rounded-lg glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-xs transition-all cursor-pointer shadow-cyan-sm"
               title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
             >
-              {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+              {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
             </button>
           )}
 
           <button
             type="button"
             onClick={doSkip}
-            className="px-4 py-2 glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-xs font-orbitron font-semibold tracking-widest transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm inline-flex items-center gap-1.5"
+            className="px-2.5 sm:px-4 py-1.5 sm:py-2 glass border-glow text-white/80 hover:bg-cyan-DEFAULT hover:text-space-950 text-[10px] sm:text-xs font-orbitron font-semibold tracking-wider sm:tracking-widest transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm inline-flex items-center gap-1 sm:gap-1.5"
             aria-label="Skip intro animation"
           >
-            <span>SKIP INTRO</span>
-            <ArrowRight size={13} />
+            <span>SKIP</span>
+            <ArrowRight size={11} />
           </button>
         </div>
       </header>
@@ -690,20 +802,23 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
       </div>
 
       {/* ═════════════════════════════════════════════════════════
-          STAGE 2: TACTICAL BRIEFING VIDEO + BLUE ANIMATED FREE SIDES
+          STAGE 2: TACTICAL BRIEFING VIDEO + RESPONSIVE TACTICAL PANELS
          ═════════════════════════════════════════════════════════ */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 bg-[#020714] flex items-center justify-between overflow-hidden ${stage === 'briefing' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`absolute inset-0 transition-opacity duration-700 bg-[#020714] flex flex-col lg:flex-row items-center justify-between overflow-hidden ${stage === 'briefing' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
       >
         {/* Dynamic Blue Ambient Glow Behind Video */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.15)_0%,transparent_75%)] pointer-events-none" />
 
-        {/* ── Left Free Side: Animated Blue Tactical Panel ── */}
+        {/* ── DESKTOP ONLY: Left Free Side: Animated Blue Tactical Panel ── */}
         <TacticalSidebarLeft />
 
-        {/* ── Center: Authentic Video Player (Starts past Earth at 2.8s) ── */}
-        <div className="relative flex-1 h-full max-w-[1920px] max-h-[1080px] flex items-center justify-center p-2 sm:p-4 z-10">
+        {/* ── MOBILE ONLY: Top Tactical Strip above video ── */}
+        <TacticalMobileTopStrip />
+
+        {/* ── Center: Authentic Video Player ── */}
+        <div className="relative flex-1 w-full h-full max-w-[1920px] max-h-[1080px] flex items-center justify-center p-2 sm:p-4 z-10 min-h-0">
           <video
             ref={videoRef}
             src="/tactical-briefing.mp4"
@@ -713,7 +828,7 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={handleVideoEnded}
             onError={handleVideoEnded}
-            className="w-full h-full object-contain filter contrast-105 brightness-100 shadow-[0_0_30px_rgba(0,229,255,0.25)] rounded-lg"
+            className="w-full h-full max-h-[46vh] lg:max-h-full object-contain filter contrast-105 brightness-100 shadow-[0_0_30px_rgba(0,229,255,0.25)] rounded-lg"
           >
             <img
               src="/tactical-briefing.gif"
@@ -723,24 +838,27 @@ export default function IntroScene({ onComplete, onSkip }: IntroSceneProps) {
           </video>
 
           {/* Sci-Fi Framing Reticles */}
-          <div className="absolute top-6 left-6 w-6 h-6 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
-          <div className="absolute top-6 right-6 w-6 h-6 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
-          <div className="absolute bottom-6 left-6 w-6 h-6 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
-          <div className="absolute bottom-6 right-6 w-6 h-6 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
+          <div className="absolute top-3 sm:top-6 left-3 sm:left-6 w-4 sm:w-6 h-4 sm:h-6 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
+          <div className="absolute top-3 sm:top-6 right-3 sm:right-6 w-4 sm:w-6 h-4 sm:h-6 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
+          <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 w-4 sm:w-6 h-4 sm:h-6 border-b-2 border-l-2 border-cyan-400 pointer-events-none" />
+          <div className="absolute bottom-3 sm:bottom-6 right-3 sm:right-6 w-4 sm:w-6 h-4 sm:h-6 border-b-2 border-r-2 border-cyan-400 pointer-events-none" />
         </div>
 
-        {/* ── Right Free Side: Animated Blue Tactical Panel ── */}
+        {/* ── MOBILE ONLY: Bottom Tactical Strip below video ── */}
+        <TacticalMobileBottomStrip />
+
+        {/* ── DESKTOP ONLY: Right Free Side: Animated Blue Tactical Panel ── */}
         <TacticalSidebarRight />
 
         {/* Bottom Tactical Floating Action Bar */}
-        <div className="absolute bottom-4 inset-x-8 z-30 flex items-center justify-between pointer-events-none">
-          <div className="font-mono text-[10px] text-cyan-DEFAULT/70 tracking-widest hidden sm:block">
+        <div className="absolute bottom-2 sm:bottom-4 inset-x-4 sm:inset-x-8 z-30 flex items-center justify-between pointer-events-none">
+          <div className="font-mono text-[9px] sm:text-[10px] text-cyan-DEFAULT/70 tracking-widest hidden sm:block">
             SURVEILLANCE ACTIVE // TARGET CANDIDATE PROFILE IDENTIFIED: RUSIRU PRAMOD
           </div>
           <button
             type="button"
             onClick={handleVideoEnded}
-            className="pointer-events-auto px-4 py-2 rounded-lg glass border-glow text-cyan-DEFAULT hover:bg-cyan-DEFAULT hover:text-space-950 font-orbitron text-xs tracking-wider transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm font-semibold inline-flex items-center gap-2"
+            className="pointer-events-auto ml-auto px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-lg glass border-glow text-cyan-DEFAULT hover:bg-cyan-DEFAULT hover:text-space-950 font-orbitron text-[11px] sm:text-xs tracking-wider transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-cyan-sm font-semibold inline-flex items-center gap-1.5 sm:gap-2"
           >
             <span>LAUNCH PORTFOLIO</span>
             <Rocket size={13} />
